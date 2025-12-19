@@ -4,13 +4,14 @@ metadata:
   name: web-app-ingress
 spec:
   rules:
-    - host: devops.local    # To będzie nasz ładny adres
+    # 👇👇👇 ZMIANA TUTAJ 👇👇👇
+    - host: devops.192.168.1.35.nip.io
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: web-app # Nazwa Twojego serwisu (sprawdź w webapp.yaml czy taka jest)
+                name: web-app
                 port:
-                  number: 80  # Port serwisu (nie kontenera!)
+                  number: 80
