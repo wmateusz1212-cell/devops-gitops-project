@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  type: NodePort      # Wystawiamy aplikację na zewnątrz klastra (żebyś mógł wejść przez przeglądarkę)
+  selector:
+    app: web-app
+  ports:
+    - port: 80        # Serwis będzie dostępny na porcie 80
+      targetPort: 5000 # Ale ruch przekaże do kontenera na port 5000 (bo tak ustawiłeś we Flasku)
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 2         # <--- URUCHAMIAMY 2 KOPIE (PODY)!
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+        - name: web-app
+          # 👇👇👇 PODMIEŃ 'TWOJ_LOGIN' NA SWÓJ LOGIN Z DOCKER HUB 👇👇👇
+          image: wmateusz1212/devops-project:latest
+          # 👆👆👆 Np. wmateusz1212/devops-project:latest
+          imagePullPolicy: Always # Zawsze pobieraj najnowszą wersję z sieci
+          ports:
+            - containerPort: 5000
+          env:
+            - name: REDIS_HOST # Możemy przekazać zmienną środowiskową (opcjonalnie)
+              value: "redis"

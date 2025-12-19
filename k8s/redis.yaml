@@ -1,0 +1,34 @@
+# 1. SERWIS (Drogowskaz)
+# To dzięki temu Twój Python może łączyć się z "redis" zamiast z IP.
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis  # <--- To jest KLUCZOWE. Ta nazwa to adres DNS wewnątrz klastra.
+spec:
+  ports:
+    - port: 6379      # Na tym porcie słucha serwis
+      targetPort: 6379 # Na ten port w kontenerze kierujemy ruch
+  selector:
+    app: redis        # "Kieruj ruch do wszystkich podów, które mają naklejkę 'redis'"
+
+---
+# 2. DEPLOYMENT (Aplikacja)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1         # Jedna kopia bazy wystarczy
+  selector:
+    matchLabels:
+      app: redis      # To jest ta "naklejka", której szuka Serwis wyżej
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:alpine  # Pobieramy gotowy obraz
+          ports:
+            - containerPort: 6379
