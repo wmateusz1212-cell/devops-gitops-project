@@ -1,0 +1,39 @@
+name: Build and Push Docker Image
+
+# Kiedy odpalić ten pipeline?
+# Zawsze, gdy ktoś zrobi push na gałąź 'main'
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest  # GitHub stawia dla nas maszynę z Ubuntu
+
+    steps:
+      # 1. Pobierz kod z repozytorium
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Zaloguj się do Docker Hub (używając sekretów, które ustawiłeś)
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 3. Skonfiguruj Buildx (nowoczesny silnik budowania Dockera)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 4. Zbuduj obraz i wyślij (Push) do Docker Hub
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          # Tutaj podmień TWOJ_LOGIN na swój login z Docker Huba!
+          # Używamy tagu 'latest' oraz unikalnego numeru SHA commita (do wersjonowania)
+          tags: |
+            TWOJ_LOGIN_DOCKERHUB/devops-project:latest
+            TWOJ_LOGIN_DOCKERHUB/devops-project:${{ github.sha }}
