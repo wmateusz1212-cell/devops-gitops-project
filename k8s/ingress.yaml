@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-app-ingress
+spec:
+  rules:
+    - host: devops.local    # To będzie nasz ładny adres
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-app # Nazwa Twojego serwisu (sprawdź w webapp.yaml czy taka jest)
+                port:
+                  number: 80  # Port serwisu (nie kontenera!)
