@@ -16,7 +16,7 @@ kind: Deployment
 metadata:
   name: web-app
 spec:
-  replicas: 2         # <--- URUCHAMIAMY 2 KOPIE (PODY)!
+  replicas: 5        # <--- URUCHAMIAMY 2 KOPIE (PODY)!
   selector:
     matchLabels:
       app: web-app
