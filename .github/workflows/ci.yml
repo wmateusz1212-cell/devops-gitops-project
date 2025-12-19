@@ -35,5 +35,5 @@ jobs:
           # Tutaj podmień TWOJ_LOGIN na swój login z Docker Huba!
           # Używamy tagu 'latest' oraz unikalnego numeru SHA commita (do wersjonowania)
           tags: |
-            TWOJ_LOGIN_DOCKERHUB/devops-project:latest
-            TWOJ_LOGIN_DOCKERHUB/devops-project:${{ github.sha }}
+            wmateusz1212/devops-project:latest
+            wmateusz1212/devops-project:${{ github.sha }}
