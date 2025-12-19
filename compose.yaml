@@ -1,0 +1,15 @@
+services:
+  web-app:
+    build: .             # Buduj obraz z kropki (bieżący katalog)
+    ports:
+      - "5000:5000"      # Przekieruj port 5000 (Laptop) -> 5000 (Kontener)
+    depends_on:
+      - redis            # Uruchom dopiero jak Redis wstanie
+
+  redis:
+    image: "redis:alpine" # Pobierz gotowca z Docker Hub (wersja alpine = malutka)
+    volumes:
+      - redis-data:/data  # Trwałość danych: zapisuj bazę na dysku, nie w RAM kontenera
+
+volumes:
+  redis-data:             # Definicja wolumenu (dysku dla dockera)
